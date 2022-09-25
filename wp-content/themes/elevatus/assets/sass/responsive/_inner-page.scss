@@ -1,0 +1,33 @@
+@media (max-width: 1200px) {
+}
+@media (max-width: 990px) {
+    // Global
+    .btn {
+        font-size: 14px;
+    }
+    .on-desktop {
+        display: none !important;
+    }
+    .on-mobile {
+        display: block;
+    }
+    .page-header {
+        margin-bottom: 2rem;
+        width: calc(100% + 4rem);
+        position: relative;
+        left: -2rem;
+        h1 {
+            padding: 2rem;
+            margin: 0;
+        }
+    }
+}
+
+@media (max-width: 500px) {
+    .accordion-sec .accordion-wrapper .accordion {
+        padding-left: 1rem;
+        &::before {
+            left: 1rem;
+        }
+    }
+}

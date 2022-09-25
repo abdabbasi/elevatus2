@@ -1,0 +1,71 @@
+/////////////////////////////**************/////////////////////////////
+///////////////////////////// display-flex /////////////////////////////
+/////////////////////////////**************/////////////////////////////
+.d-flex{
+    display: flex;
+}
+
+.flex-wrap{
+    flex-wrap: wrap;
+}
+
+// justify-content
+.j-center{
+    justify-content: center;
+}
+
+.j-sb{
+    justify-content: space-between;
+}
+
+.j-sa{
+    justify-content: space-around;
+}
+
+.j-start{
+    justify-content: start;
+}
+
+.j-end{
+    justify-content: end;
+}
+
+.j-flex-end{
+    justify-content: flex-end;
+}
+
+
+/////////// align-items ///////////
+.align-center{
+    align-items: center;
+}
+
+.align-start{
+    align-items: flex-start;
+}
+
+.align-end{
+    align-items: flex-end;
+}
+
+
+////////// flex-direction /////////
+.fd-row-rev{
+    flex-direction: row-reverse;
+}
+
+.fd-col{
+    flex-direction: column;
+}
+
+.fd-col-rev{
+    flex-direction: column-reverse;
+}
+
+/////////////////////////////**************/////////////////////////////
+///////////////////////////// display-grid /////////////////////////////
+/////////////////////////////**************/////////////////////////////
+
+.d-grid{
+    display: grid;
+}

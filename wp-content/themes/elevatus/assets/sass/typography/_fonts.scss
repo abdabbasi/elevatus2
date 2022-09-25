@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+$main_font: 'Inter', sans-serif;
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.capitalize{
+    text-transform: capitalize;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.text-center{
+    text-align: center !important;    
+}
+.text-left{
+    text-align: left !important;      
+}
+.text-right{
+    text-align: right  !important;
+}

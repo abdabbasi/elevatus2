@@ -1,0 +1,20 @@
+@media (max-width: 1200px) {
+}
+@media (max-width: 990px) {
+    
+}
+
+@media (max-width: 500px) {
+    .contact-form {
+        padding: 0 1rem 1rem !important;
+        .wpforms-field-label {
+            padding-left: 1rem !important;
+        }
+        .wpforms-field::after {
+            left: 1rem;
+        }
+        .contact-form .btn-main {
+            margin-top: 2rem !important;
+        }
+    }
+}

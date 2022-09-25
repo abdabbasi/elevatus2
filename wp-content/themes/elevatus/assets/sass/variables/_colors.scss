@@ -1,0 +1,20 @@
+
+$white: #ffffff;
+$black: #212121;
+$main_color: #051274;
+$secondary_color: #EAEBF9;
+
+//////////// Text Color ///////////////
+
+.txt-white{
+    color: $white !important;
+}
+
+.txt-black{
+    color: $black !important;
+}
+
+.txt-red{
+    color: $main_color;
+}
+

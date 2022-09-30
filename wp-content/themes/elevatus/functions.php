@@ -231,7 +231,7 @@ if( function_exists('acf_add_options_page') ) {
 		'menu_title'	=> 'Our People',
 		'menu_slug' 	=> 'our-people-settings',
 		'capability'	=> 'edit_posts',
-		'icon_url' 		=> 'dashicons-groups',
+		'icon_url' 		=> 'groups',
 		'position' 		=> '6',
 		'redirect'		=> false
 	));
@@ -259,3 +259,123 @@ function wpb_sm_menu() {
 	register_nav_menu('sm-menu',__( 'Social Media Menu' ));
 }
 add_action( 'init', 'wpb_sm_menu' );
+
+// Custom Blocks
+add_action('acf/init', 'my_acf_init_block_types');
+function my_acf_init_block_types() {
+    
+    // Check function exists.
+    if( function_exists('acf_register_block_type') ) {
+        
+        // register a Three Column block.
+        acf_register_block_type(array(
+            'name'              => 'three-col',
+            'title'             => __('Three Column'),
+            'description'       => __('A custom Text block.'),
+            'render_template'   => 'blocks/three-col.php',
+            'category'          => 'formatting',
+            'icon'              => 'columns',
+            'keywords'          => array( 'column' ),
+        ));
+
+        // register a Product Header block.
+        acf_register_block_type(array(
+            'name'              => 'product-header',
+            'title'             => __('Product Header'),
+            'description'       => __('A custom Header block.'),
+            'render_template'   => 'blocks/product-header.php',
+            'category'          => 'formatting',
+            'icon'              => 'media-default',
+            'keywords'          => array( 'header' ),
+        ));
+
+        // register a integration-slider block.
+        acf_register_block_type(array(
+            'name'              => 'integration-slider',
+            'title'             => __('Integration Slider'),
+            'description'       => __('A custom integration slider block.'),
+            'render_template'   => 'blocks/integration-slider.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-gallery',
+            'keywords'          => array( 'slider' ),
+        ));
+
+		// register a testimonial block.
+        acf_register_block_type(array(
+            'name'              => 'testimonial-1',
+            'title'             => __('Testimonial one slide'),
+            'description'       => __('A custom testimonial with 1 slide/page block.'),
+            'render_template'   => 'blocks/testimonials.php',
+            'category'          => 'formatting',
+            'icon'              => 'admin-comments',
+            'keywords'          => array( 'testimonial', 'quote' ),
+        ));
+
+		// register a testimonial block.
+        acf_register_block_type(array(
+            'name'              => 'testimonial-2',
+            'title'             => __('Testimonial two slide'),
+            'description'       => __('A custom testimonial with 2 slide/page block.'),
+            'render_template'   => 'blocks/testimonials-2.php',
+            'category'          => 'formatting',
+            'icon'              => 'admin-comments',
+            'keywords'          => array( 'testimonial', 'quote' ),
+        ));
+
+		// register a content-image-accordion block.
+        acf_register_block_type(array(
+            'name'              => 'content-image-accordion',
+            'title'             => __('Content & image with accordion'),
+            'description'       => __('A custom content-image-accordion block.'),
+            'render_template'   => 'blocks/content-image-accordion.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'content', 'image' ),
+        ));
+
+		// register a signed-offers block.
+        acf_register_block_type(array(
+            'name'              => 'signed-offers',
+            'title'             => __('Signed offers'),
+            'description'       => __('A custom signed-offers-sec block.'),
+            'render_template'   => 'blocks/signed-offers.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'content', 'image' ),
+        ));
+
+		// register a progress-analytics block.
+        acf_register_block_type(array(
+            'name'              => 'progress-analytics',
+            'title'             => __('Progress & Analytics'),
+            'description'       => __('A custom progress-analytics-sec block.'),
+            'render_template'   => 'blocks/analytics.php',
+            'category'          => 'formatting',
+            'icon'              => 'analytics',
+            'keywords'          => array( 'content', 'image' ),
+        ));
+
+		// register a Awards block.
+        acf_register_block_type(array(
+            'name'              => 'awards',
+            'title'             => __('Awards'),
+            'description'       => __('A custom awards-sec block.'),
+            'render_template'   => 'blocks/awards.php',
+            'category'          => 'formatting',
+            'icon'              => 'awards',
+            'keywords'          => array( 'content', 'image' ),
+        ));
+
+		// register a Products List block.
+        acf_register_block_type(array(
+            'name'              => 'product-list',
+            'title'             => __('Products List'),
+            'description'       => __('A custom Products List block.'),
+            'render_template'   => 'blocks/list-products.php',
+            'category'          => 'formatting',
+            'icon'              => 'products',
+            'keywords'          => array( 'products' ),
+        ));
+    }
+
+}

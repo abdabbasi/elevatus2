@@ -161,84 +161,10 @@
 </section>
 
 <!-- Integrations Slider Section -->
-<section class="integrations-sec pb-3">
-    <div class="splide integrations-slider pt-2">
-        <div class="splide__track">
-            <ul class="splide__list">
-                <?php if( have_rows('integrations_slider', 'option') ): ?>
-                <?php while( have_rows('integrations_slider', 'option') ): the_row();?>
-                <li class="splide__slide">
-                    <div class="slide">
-                        <img class="logo" src="<?php echo get_sub_field('logo', 'option')['url']; ?>"
-                            alt="<?php echo get_sub_field('logo', 'option')['alt']; ?>">
-                        <p class="title"><?php echo get_sub_field('title', 'option'); ?></p>
-                        <p class="content"><?php echo get_sub_field('content', 'option'); ?></p>
-                        <a href="<?php echo get_sub_field('link', 'option'); ?>"><img
-                                src="<?php echo site_url('/wp-content/themes/elevatus/assets/images/arrow-up-right.svg'); ?>"
-                                alt="arrow-up-right"></a>
-                    </div>
-                </li>
-                <?php endwhile; ?>
-                <?php endif; ?>
-            </ul>
-        </div>
-    </div>
-</section>
+<?php include get_theme_file_path('/inc/integration-slider.php'); ?>
 
 <!-- Awards Section -->
-<section class="awards-sec pt-3 pb-3">
-    <div class="container">
-        <div class="d-flex flex-wrap pt-2">
-            <div class="w-2 box big-box">
-                <?php
-                            $box_1 = get_field('box_1');
-                            if( $box_1 ): ?>
-                <div class="box-wrapper">
-                    <img class="logo" src="<?php echo $box_1['logo']; ?>" alt="" />
-                    <p class="year"><?php echo $box_1['year']; ?></p>
-                    <p class="name"><?php echo $box_1['name']; ?></p>
-                </div>
-                <?php endif; ?>
-            </div>
-            <div class="w-2 d-flex flex-wrap">
-                <div class="w-1 box">
-                    <?php
-                            $box_2 = get_field('box_2');
-                            if( $box_2 ): ?>
-                    <div class="box-wrapper d-flex align-center j-center fd-col">
-                        <img class="logo" src="<?php echo $box_2['logo']; ?>" alt="" />
-                        <p class="year text-center"><?php echo $box_2['year']; ?></p>
-                        <p class="name text-center"><?php echo $box_2['name']; ?></p>
-                    </div>
-                    <?php endif; ?>
-                </div>
-                <div class="w-2 box">
-                    <?php
-                            $box_3 = get_field('box_3');
-                            if( $box_3 ): ?>
-                    <div class="box-wrapper">
-                        <img class="logo" src="<?php echo $box_3['logo']; ?>" alt="" />
-                        <p class="year"><?php echo $box_3['year']; ?></p>
-                        <p class="name"><?php echo $box_3['name']; ?></p>
-                    </div>
-                    <?php endif; ?>
-                </div>
-                <div class="w-2 box">
-                    <?php
-                    $box_4 = get_field('box_4');
-                    if( $box_4 ): ?>
-                    <div class="box-wrapper">
-                        <img class="logo" src="<?php echo esc_url( $box_4['logo']['url'] ); ?>"
-                            alt="<?php echo esc_attr( $box_4['logo']['alt'] ); ?>" />
-                        <p class="year"><?php echo $box_4['year']; ?></p>
-                        <p class="name"><?php echo $box_4['name']; ?></p>
-                    </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<?php include get_theme_file_path('/inc/awards.php'); ?>
 
 <!-- Testimonials Section -->
 <?php include get_theme_file_path('/inc/testimonials-sec-2.php'); ?>
@@ -268,13 +194,13 @@
     </div>
 </section>
 
-<!-- CTA Section -->
-<?php include get_theme_file_path('/inc/cta-section.php'); ?>
 
 <div>
     <?php echo the_content(); ?>
 </div>
 
+<!-- CTA Section -->
+<?php include get_theme_file_path('/inc/cta-section.php'); ?>
 
 <?php
 get_footer();

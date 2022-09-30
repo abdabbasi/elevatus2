@@ -4,7 +4,7 @@ window.__forceSmoothScrollPolyfill__ = true;
 // Main Menu Controller
 class MainMenu extends Stimulus.Controller {
     toggle(event) {
-        var header = document.querySelector('#masthead');
+        const header = document.querySelector('#masthead');
         header.classList.toggle('show-menu');
     }
 }
@@ -22,7 +22,7 @@ application.register("scrollTop", scrollTop)
 // Accordion Controller
 class accordion extends Stimulus.Controller {
     toggle(e) {
-        var allAccordions = document.querySelectorAll('.accordion-container')
+        const allAccordions = document.querySelectorAll('.accordion-container')
         if(e.target.closest('.accordion-container').classList.contains('active')){
             e.target.closest('.accordion-container').classList.remove('active')
         }else {
@@ -34,6 +34,31 @@ class accordion extends Stimulus.Controller {
     }
 }
 application.register("accordion", accordion)
+
+// Tabs Controller
+class tabs extends Stimulus.Controller {
+    connect() {
+        document.querySelector('.tabs .tab[id="tab-1"]').classList.add('active')
+        document.querySelector('.tabs-wrapper .tabs-container[data-id="tab-1"]').classList.add('active')
+    }
+
+    open(e) {
+        const allTabs = document.querySelectorAll('.tabs .tab')
+        const allTabsContainer = document.querySelectorAll('.tabs-wrapper .tabs-container')
+        const tabID = e.target.id
+
+        allTabs.forEach(el => {
+            el.classList.remove('active')
+        });
+        allTabsContainer.forEach(el => {
+            el.classList.remove('active')
+        });
+        
+        e.target.classList.add('active')
+        document.querySelector(`.tabs-wrapper .tabs-container[data-id="${tabID}"]`).classList.add('active')
+    }
+}
+application.register("tabs", tabs)
 
 // Mega Menu Function
 // let windowWidth = window.innerWidth;

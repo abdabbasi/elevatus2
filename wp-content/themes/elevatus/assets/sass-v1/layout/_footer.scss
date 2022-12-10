@@ -1,0 +1,96 @@
+footer {
+    padding: 3rem 0 6rem;
+    background-color: #f6f6f6;
+    position: relative;
+    .w-5 {
+        padding-right: 2rem;
+    } 
+    .site-branding {
+        height: auto;
+        max-width: 180px;
+        margin: 1.5rem 0;
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+        }
+    }
+    .menu-title {
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 180%;
+        color: #242533;
+        margin-bottom: 0.25rem;
+    }
+    .menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        li {
+            a {
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 180%;
+                color: #484964;
+                &:hover {
+                    transform: translateX(10px);
+                    color: $main_color;
+                }
+            }
+        }
+    }
+    #sm-menu {
+        li {
+            a {
+                position: relative;
+                width: fit-content;
+                &::after {
+                    content: '';
+                    position: absolute;
+                    width: 20px;
+                    height: 20px;
+                    right: -1.5rem;
+                    top: 0.3rem;
+                    background-image: url('assets/images/arrow-up-right2.svg');
+                    background-size: contain;
+                }
+            }
+        }
+    }
+}
+
+#back_to_top {
+    position: absolute;
+    top: -25px;
+    right: 5rem;
+    width: 50px;
+    height: 50px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    color: #f0f4f6;
+    background-color: $main_color;
+    text-align: center;
+    text-transform: uppercase;
+    overflow: hidden;
+    cursor: pointer;
+    .word {
+        transform: translateY(10px);
+        height: 0;
+        overflow: hidden;
+    }
+    i {
+        font-size: 18px;
+    }
+    &:hover {
+        background-color: $main_color;
+        i {
+            transform: translateY(-1rem);
+        }
+        .word {
+            transform: translateY(0);
+            height: 40px;
+        }
+    }
+}

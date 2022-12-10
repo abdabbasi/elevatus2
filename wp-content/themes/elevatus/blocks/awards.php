@@ -1,5 +1,6 @@
-<section class="awards-sec pt-3 pb-3">
+<section class="awards-sec pt-3 pb-3 <?php echo $block['className']; ?>">
     <div class="container">
+        <h4><?php echo get_field('awards_title', 'option'); ?></h4>
         <div class="d-flex flex-wrap pt-2">
             <div class="w-2 box big-box">
                 <?php

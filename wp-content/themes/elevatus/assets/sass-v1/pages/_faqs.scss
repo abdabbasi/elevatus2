@@ -1,0 +1,129 @@
+.accordion-sec {
+    padding: 4rem 0;
+    .accordion-wrapper {
+        &.open {
+            .accordion {
+                .content {
+                    padding: 0 0 1rem;
+                    max-height: 100vh;
+                    visibility: visible;
+                    transition: all 0.7s ease-in-out;
+                }
+                .title {
+                    color: $main_color;
+                }
+                &::after {
+                    transform: rotate(45deg);
+                }
+                &::before {
+                    width: calc(100% - 4rem);
+                }
+            }
+        }
+        &:hover {
+            .accordion {
+                .title {
+                    color: $main_color;
+                }
+                &::before {
+                    width: calc(100% - 4rem);
+                }
+            }
+        }
+        .accordion {
+            position: relative;
+            border-bottom: 1px solid lighten($secondary_color, 20%);
+            padding: 0 2rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            &::after {
+                content: "\2b";
+                position: absolute;
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+                right: 1rem;
+                top: 0.7rem;
+                font-size: 20px;
+                color: $main_color;
+                cursor: pointer;
+                transition: all 0.3s;
+                pointer-events: none;
+            }
+            &::before {
+                content: "";
+                position: absolute;
+                left: 2rem;
+                bottom: 0;
+                background-color: $main_color;
+                height: 3px;
+                width: 100px;
+                transition: all 0.5s ease-in-out;
+            }
+            .title {
+                padding: 1rem 0;
+                font-weight: 400;
+                font-size: 18px;
+                line-height: 20px;
+                cursor: pointer;
+            }
+            .content {
+                padding: 0;
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 26px;
+                letter-spacing: 0px;
+                color: $secondary_color;
+                max-height: 0;
+                visibility: hidden;
+                overflow: hidden;
+                transition: all 0.5s;
+            }
+        }
+    }
+}
+
+.page-template-faq {
+    // Search Section
+    .asl_w_container.asl_w_container_1 {
+        padding: 2rem 0;
+        margin: 0;
+    }
+    #ajaxsearchlite1 .probox,
+    div.asl_w .probox {
+        height: auto !important;
+        align-items: center;
+    }
+    div.asl_m .proinput input.orig {
+        padding: 1rem !important;
+    }
+
+    // Header Section
+    .product-header-sec {
+        height: calc(90vh - 78px);
+        background: transparent;
+        margin-bottom: 0;
+        h1 {
+            font-weight: 400;
+            font-size: 108px;
+            line-height: 110%;
+            color: #242533;
+        }
+    }
+
+    .accordion-sec {
+        padding: 0 0 3rem;
+        .accordion-wrapper {
+            .accordion-container {
+                padding: 1rem 0;
+                &::after {
+                    top: 34px;
+                }
+                .title {
+                    font-weight: 400;
+                    font-size: 20px;
+                    line-height: 135%;
+                }
+            }
+        }
+    }
+}

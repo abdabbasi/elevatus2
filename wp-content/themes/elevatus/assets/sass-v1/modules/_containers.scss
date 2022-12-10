@@ -1,0 +1,23 @@
+.container, .wp-block-group__inner-container {
+  padding: 0 15px;
+  width: 1400px;
+  margin-right: auto;
+  margin-left: auto;
+  box-sizing: border-box;
+}
+@media (max-width: 1700px){
+  .container, .wp-block-group__inner-container {
+    width: 1200px;
+  }
+}
+@media (max-width: 1400px){
+  .container, .wp-block-group__inner-container {
+    padding: 0 2rem;
+    width: 100%;
+  }
+}
+@media (max-width: 768px) {  
+  .container, .wp-block-group__inner-container{
+    width: 100%;
+  }
+}

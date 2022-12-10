@@ -1,0 +1,111 @@
+h1 {
+    font-weight: 400;
+    font-size: 81px;
+    line-height: 110%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-weight: 400;
+    font-size: 58px;
+    line-height: 110%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-weight: 400;
+    font-size: 44px;
+    line-height: 120%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+h4 {
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 140%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+h5 {
+    font-weight: 300;
+    font-size: 20px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+h6 {
+    font-weight: 300;
+    font-size: 18px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+p {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 145%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.big-text {
+    font-weight: 600;
+    font-size: 56px;
+    line-height: 74px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.small-text {
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 19px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+.small-text,
+.big-text {
+    color: #000000;
+    &.white {
+        color: $white;
+    }
+    &.light {
+        color: #808192;
+    }
+    span {
+        // color: #6371f0;
+        background: -webkit-linear-gradient(132.66deg, #6664d5 -12.57%, #81aae8 98.73%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        &.green {
+            background: linear-gradient(128.86deg, #4ca796 11.22%, #91f1c9 96.07%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+        }
+    }
+}
+
+.sub-heading {
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 145%;
+    color: #242533;
+}
+.sub-title {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 155%;
+    color: #808192;
+}

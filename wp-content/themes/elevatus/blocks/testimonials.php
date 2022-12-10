@@ -1,4 +1,4 @@
-<section class="testimonial-sec pb-3">
+<section class="testimonial-sec pb-3 <?php echo $block['className']; ?>">
     <div class="container pt-3 pb-3">
         <h4><?php echo get_field('testimonial_title', 'option'); ?></h4>
         <div class="splide testimonials-slider pt-3">

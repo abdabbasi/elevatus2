@@ -1,5 +1,5 @@
 <!-- Features Section -->
-<section class="features-sec three-col pt-3 pb-3">
+<section class="features-sec three-col pt-3 pb-4 <?php echo $block['className']; ?>">
     <div class="container">
         <h3 class="text-center"><?php echo get_field('section_title'); ?></h3>
         <div class="boxes d-flex flex-wrap j-sb pt-2">

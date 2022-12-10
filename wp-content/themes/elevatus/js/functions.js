@@ -2,67 +2,30 @@
 //    All Sliders    //
 // ******************//
 
-// Home Page Client Slider
-// if (document.querySelector('.client-slider')) {
-// 	new Splide('.client-slider', {
-// 		type: 'loop',
-// 		rewind: true,
-// 		perPage: 5,
-// 		perMove: 5,
-// 		arrows: false,
-// 		pagination: false,
-// 		autoplay: true,
-// 		breakpoints: {
-// 			770: {
-// 				perPage: 2,
-// 				perMove: 2,
-// 			},
-// 			480: {
-// 				perPage: 1,
-// 				perMove: 1,
-// 			},
-// 		},
-// 	}).mount();
-// }
-
-
-// Founders history Slider
-// if (document.querySelector('.founders-slider')) {
-// 	new Splide('.founders-slider', {
-// 		type: 'fade',
-// 		rewind: true,
-// 		perPage: 1,
-// 		arrows: false,
-// 		pagination: true,
-// 		autoplay: true,
-// 		speed: 900,
-// 	}).mount();
-// }
-
-
-// Team Slider
-// if (document.querySelector('.team-slider')) {
-// 	new Splide('.team-slider', {
-// 		type: 'loop',
-// 		rewind: true,
-// 		perPage: 3,
-// 		perMove: 1,
-// 		arrows: true,
-// 		pagination: false,
-// 		autoplay: true,
-// 		speed: 900,
-// 		breakpoints: {
-// 			770: {
-// 				perPage: 2,
-// 				perMove: 2,
-// 			},
-// 			480: {
-// 				perPage: 1,
-// 				perMove: 1,
-// 			},
-// 		},
-// 	}).mount();
-// }
+// Our Team Slider
+if (document.querySelector('.our-team-slider')) {
+	new Splide('.our-team-slider', {
+		type: 'loop',
+		rewind: true,
+		perPage: 3,
+		perMove: 1,
+		arrows: true,
+		pagination: false,
+		autoplay: true,
+		speed: 900,
+		breakpoints: {
+			900: {
+				perPage: 2,
+				arrows: false,
+				autoplay: true,
+				speed: 1500,
+			},
+			480: {
+				perPage: 1,
+			},
+		},
+	}).mount();
+}
 
 // Testimonials Slider Slider
 if (document.querySelector('.testimonials-slider')) {
@@ -80,10 +43,16 @@ if (document.querySelector('.testimonials-slider-2')) {
 	new Splide('.testimonials-slider-2', {
 		type: 'loop',
 		perPage: 2,
+		perMove: 1,
 		arrows: true,
 		pagination: false,
 		autoplay: true,
 		speed: 900,
+		breakpoints: {
+			770: {
+				perPage: 1,
+			},
+		},
 	}).mount();
 }
 
@@ -99,14 +68,62 @@ if (document.querySelector('.integrations-slider')) {
 		autoplay: true,
 		speed: 900,
 		breakpoints: {
+			1700: {
+				perPage: 4,
+			},
 			770: {
 				perPage: 3,
-				perMove: 2,
 			},
 			480: {
 				perPage: 1,
-				perMove: 1,
 			},
 		},
 	}).mount();
 }
+
+// Company Logos Slider
+if (document.querySelector('.company-logos-slider')) {
+	new Splide('.company-logos-slider', {
+		type: 'loop',
+		rewind: true,
+		perPage: 5,
+		perMove: 1,
+		arrows: false,
+		pagination: false,
+		autoplay: true,
+		speed: 900,
+		breakpoints: {
+			1100: {
+				perPage: 4,
+			},
+			900: {
+				perPage: 3,
+			},
+			480: {
+				perPage: 2,
+			},
+		},
+	}).mount();
+}
+
+
+// Side Menu Section
+document.addEventListener("DOMContentLoaded", function(){
+    if(document.querySelector('.has-side-menu .side-menu')){
+        var sideMenu = document.querySelectorAll('.has-side-menu .side-menu a')
+		console.log(sideMenu)
+        if (sideMenu.length != 0){
+
+            document.querySelector('.has-side-menu .side-menu a').classList.add('active')
+            sideMenu.forEach(el => {
+                el.addEventListener('click', function(){
+                    sideMenu.forEach(el => {
+                        el.classList.remove('active')
+                    })
+                    this.classList.add('active')
+                })
+            });
+        }
+    }
+});
+

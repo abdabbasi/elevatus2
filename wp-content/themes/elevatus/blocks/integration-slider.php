@@ -1,4 +1,7 @@
-<section class="integrations-sec pb-3">
+<section class="integrations-sec pb-3 <?php echo $block['className']; ?>">
+    <div class="container">
+        <p class="sub-heading pt-3 on-desktop on-mobile"><?php echo get_field('integrations_title', 'option'); ?></p>
+    </div>
     <div class="splide integrations-slider pt-2">
         <div class="splide__track">
             <ul class="splide__list">

@@ -2,6 +2,7 @@
 require_once(dirname(__FILE__) . '/wordfenceConstants.php');
 require_once(dirname(__FILE__) . '/wfScanEngine.php');
 require_once(dirname(__FILE__) . '/wfScan.php');
+require_once(dirname(__FILE__) . '/wfScanMonitor.php');
 require_once(dirname(__FILE__) . '/wfCrawl.php');
 require_once(dirname(__FILE__) . '/Diff.php');
 require_once(dirname(__FILE__) . '/Diff/Renderer/Html/SideBySide.php');
@@ -122,6 +123,7 @@ class wordfence {
 
 		//Remove all scheduled scans.
 		wfScanner::shared()->unscheduleAllScans();
+		wfScanMonitor::handleDeactivation();
 
 		// Remove cron for email summary
 		wfActivityReport::clearCronJobs();
@@ -180,19 +182,10 @@ class wordfence {
 	private static function keyAlert($msg){
 		self::alert($msg, $msg . " " . __("To ensure uninterrupted Premium Wordfence protection on your site,\nplease renew your license by visiting http://www.wordfence.com/ Sign in, go to your dashboard,\nselect the license about to expire and click the button to renew that license.", 'wordfence'), false);
 	}
-	public static function dailyCron() {
-		$lastDailyCron = (int) wfConfig::get('lastDailyCron', 0);
-		if (($lastDailyCron + 43200) > time()) { //Run no more frequently than every 12 hours
-			return;
-		}
-		
-		wfConfig::set('lastDailyCron', time());
-		
-		global $wpdb;
-		$version = $wpdb->get_var("SELECT VERSION()");
-		wfConfig::set('dbVersion', $version);
-
+	private static function pingApiKey() {
 		$apiKey = wfConfig::get('apiKey');
+		if (empty($apiKey))
+			return;
 		$api = new wfAPI($apiKey, wfUtils::getWPVersion());
 		try {
 			$keyType = wfLicense::KEY_TYPE_FREE;
@@ -279,7 +272,21 @@ class wordfence {
 		catch(Exception $e){
 			wordfence::status(4, 'error', sprintf(/* translators: Wordfence license key. */ __("Could not verify Wordfence License: %s", 'wordfence'), $e->getMessage()));
 		}
+	}
+	public static function dailyCron() {
+		$lastDailyCron = (int) wfConfig::get('lastDailyCron', 0);
+		if (($lastDailyCron + 43200) > time()) { //Run no more frequently than every 12 hours
+			return;
+		}
+
+		wfConfig::set('lastDailyCron', time());
 		
+		global $wpdb;
+		$version = $wpdb->get_var("SELECT VERSION()");
+		wfConfig::set('dbVersion', $version);
+
+		self::pingApiKey();
+
 		$allowMySQLi = wfConfig::testDB();
 		wfConfig::set('allowMySQLi', $allowMySQLi);
 
@@ -401,6 +408,15 @@ class wordfence {
 		
 		wfVersionCheckController::shared()->checkVersionsAndWarn();
 	}
+	private static function scheduleCrons($delay = 0) {
+		wp_clear_scheduled_hook('wordfence_daily_cron');
+		wp_clear_scheduled_hook('wordfence_hourly_cron');
+		if (is_main_site()) {
+			wfConfig::remove('lastDailyCron');
+			wp_schedule_event(time() + $delay, 'daily', 'wordfence_daily_cron'); //'daily'
+			wp_schedule_event(time() + $delay, 'hourly', 'wordfence_hourly_cron');
+		}
+	}
 	public static function runInstall(){
 		if(self::$runInstallCalled){ return; }
 		self::$runInstallCalled = true;
@@ -457,31 +473,12 @@ SQL
 			wfConfig::enableAutoUpdate(); //Sets up the cron
 		}
 
-		$freshAPIKey = false;
-		if(! wfConfig::get('apiKey')){
-			$api = new wfAPI('', wfUtils::getWPVersion());
-			try {
-				$keyData = $api->call('get_anon_api_key');
-				if($keyData['ok'] && $keyData['apiKey']){
-					wfConfig::set('apiKey', $keyData['apiKey']);
-					wfConfig::set('keyType', wfLicense::KEY_TYPE_FREE);
-					wfConfig::set('touppPromptNeeded', true);
-					$freshAPIKey = true;
-				} else {
-					throw new Exception(__("Could not understand the response we received from the Wordfence servers when applying for a free license key.", 'wordfence'));
-				}
-			} catch(Exception $e){
-				error_log("Could not fetch free license key from Wordfence: " . $e->getMessage());
-				return;
-			}
+		$freshAPIKey = !wfConfig::get('apiKey');
+		if ($freshAPIKey) {
+			wfConfig::set('touppPromptNeeded', true);
 		}
-		wp_clear_scheduled_hook('wordfence_daily_cron');
-		wp_clear_scheduled_hook('wordfence_hourly_cron');
-		if (is_main_site()) {
-			wfConfig::remove('lastDailyCron');
-			wp_schedule_event(time() + 15, 'daily', 'wordfence_daily_cron'); //'daily'
-			wp_schedule_event(time() + 15, 'hourly', 'wordfence_hourly_cron');
-		}
+
+		self::scheduleCrons(15);
 
 		$db = new wfDB();
 
@@ -1303,7 +1300,6 @@ SQL
 		
 		add_action('wfls_xml_rpc_blocked', 'wordfence::checkSecurityNetwork');
 		add_action('wfls_registration_blocked', 'wordfence::checkSecurityNetwork');
-		add_action('wfls_activation_page_header', 'wordfence::_outputLoginSecurityInstallation');
 		add_action('wfls_activation_page_footer', 'wordfence::_outputLoginSecurityTour');
 		add_action('wfls_settings_set', 'wordfence::queueCentralConfigurationSync');
 
@@ -1320,6 +1316,7 @@ SQL
 					add_action('network_admin_menu', 'wordfence::admin_menus_60', 60);
 					add_action('network_admin_menu', 'wordfence::admin_menus_70', 70);
 					add_action('network_admin_menu', 'wordfence::admin_menus_80', 80);
+					add_action('network_admin_menu', 'wordfence::admin_menus_85', 85);
 					add_action('network_admin_menu', 'wordfence::admin_menus_90', 90);
 				} //else don't show menu
 			} else {
@@ -1331,9 +1328,11 @@ SQL
 				add_action('admin_menu', 'wordfence::admin_menus_60', 60);
 				add_action('admin_menu', 'wordfence::admin_menus_70', 70);
 				add_action('admin_menu', 'wordfence::admin_menus_80', 80);
+				add_action('admin_menu', 'wordfence::admin_menus_85', 85);
 				add_action('admin_menu', 'wordfence::admin_menus_90', 90);
 			}
 			add_filter('plugin_action_links_' . plugin_basename(realpath(dirname(__FILE__) . '/../wordfence.php')), 'wordfence::_pluginPageActionLinks');
+			add_filter('pre_current_active_plugins', 'wordfence::registerDeactivationPrompt');
 		}
 
 		add_action('request', 'wordfence::preventAuthorNScans');
@@ -1387,6 +1386,17 @@ SQL
 				return $translation;
 			}, 10, 3);
 		}
+
+		wfScanMonitor::registerActions();
+	}
+
+	public static function shouldRegisterDeactivationPrompt() {
+		return !wfConfig::get('deleteTablesOnDeact');
+	}
+
+	public static function registerDeactivationPrompt() {
+		if (self::shouldRegisterDeactivationPrompt())
+			echo wfView::create('offboarding/deactivation-prompt')->render();
 	}
 
 	public static function showDisabledApplicationPasswordsMessage() {
@@ -1398,12 +1408,6 @@ SQL
 			$links = array_merge(array('aWordfencePluginCallout' => '<a href="https://www.wordfence.com/zz12/wordfence-signup/" target="_blank" rel="noopener noreferrer"><strong style="color: #11967A; display: inline;">' . esc_html__('Upgrade To Premium', 'wordfence') . '</strong><span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>'), $links);
 		} 
 		return $links;
-	}
-	
-	public static function _outputLoginSecurityInstallation() {
-		if (WORDFENCE_LS_FROM_CORE && wfOnboardingController::shouldShowAttempt3()) {
-			echo wfView::create('onboarding/banner')->render();
-		}
 	}
 	
 	public static function _outputLoginSecurityTour() {
@@ -1458,8 +1462,8 @@ SQL
 		}
 	}
 
-	private static function isWordfencePage() {
-		return (isset($_GET['page']) && (preg_match('/^Wordfence/', @$_GET['page']) || ($_GET['page'] == 'WFLS' && wfOnboardingController::shouldShowNewTour(wfOnboardingController::TOUR_LOGIN_SECURITY))));
+	private static function isWordfencePage($includeWfls = true) {
+		return (isset($_GET['page']) && (preg_match('/^Wordfence/', @$_GET['page']) || ($includeWfls && $_GET['page'] == 'WFLS' && wfOnboardingController::shouldShowNewTour(wfOnboardingController::TOUR_LOGIN_SECURITY))));
 	}
 
 	public static function enqueueDashboard() {
@@ -2126,69 +2130,60 @@ SQL
 				}
 				
 				if ($allowSync) {
-					if (version_compare(phpversion(), '5.4.0', '>=')) {
-						if (!class_exists('wfGeoIP2')) {
-							require_once(dirname(__FILE__) . '/../models/common/wfGeoIP2.php');
-						}
-						
-						try {
-							$wflogsGeoIP = @wfGeoIP2::shared(wfGeoIP2::DB_WFLOGS);
-							$bundledGeoIP = @wfGeoIP2::shared(wfGeoIP2::DB_BUNDLED);
-							
-							if ($wflogsGeoIP === false || $wflogsGeoIP->version() != $bundledGeoIP->version()) {
-								$source = dirname(__FILE__) . '/GeoLite2-Country.mmdb';
-								if (copy($source, $destination)) {
-									$shash = '';
-									$dhash = '';
-									
-									$sp = @fopen($source, "rb");
-									if ($sp) {
-										$scontext = hash_init('sha256');
-										while (!feof($sp)) {
-											$data = fread($sp, 65536);
-											if ($data === false) {
-												$scontext = false;
-												break;
-											}
-											hash_update($scontext, $data);
+					wfUtils::requireIpLocator();
+					try {
+						$wflogsLocator = wfIpLocator::getInstance(wfIpLocator::SOURCE_WFLOGS);
+						$bundledLocator = wfIpLocator::getInstance(wfIpLocator::SOURCE_BUNDLED);
+						if (!$wflogsLocator->isPreferred() || $wflogsLocator->getDatabaseVersion() !== $bundledLocator->getDatabaseVersion()) {
+							$source = dirname(__FILE__) . '/GeoLite2-Country.mmdb';
+							if (copy($source, $destination)) {
+								$shash = '';
+								$dhash = '';
+								$sp = @fopen($source, "rb");
+								if ($sp) {
+									$scontext = hash_init('sha256');
+									while (!feof($sp)) {
+										$data = fread($sp, 65536);
+										if ($data === false) {
+											$scontext = false;
+											break;
 										}
-										fclose($sp);
-										if ($scontext !== false) {
-											$shash = hash_final($scontext, false);
-										}
+										hash_update($scontext, $data);
 									}
-									
-									$dp = @fopen($destination, "rb");
-									if ($dp) {
-										$dcontext = hash_init('sha256');
-										while (!feof($dp)) {
-											$data = fread($dp, 65536);
-											if ($data === false) {
-												$dcontext = false;
-												break;
-											}
-											hash_update($dcontext, $data);
-										}
-										fclose($dp);
-										if ($scontext !== false) {
-											$dhash = hash_final($dcontext, false);
-										}
-									}
-									
-									if (hash_equals($shash, $dhash)) {
-										wfConfig::remove('needsGeoIPSync');
-										delete_transient('wfSyncGeoIPActive');
+									fclose($sp);
+									if ($scontext !== false) {
+										$shash = hash_final($scontext, false);
 									}
 								}
-							}
-							else {
-								wfConfig::remove('needsGeoIPSync');
-								delete_transient('wfSyncGeoIPActive');
+								$dp = @fopen($destination, "rb");
+								if ($dp) {
+									$dcontext = hash_init('sha256');
+									while (!feof($dp)) {
+										$data = fread($dp, 65536);
+										if ($data === false) {
+											$dcontext = false;
+											break;
+										}
+										hash_update($dcontext, $data);
+									}
+									fclose($dp);
+									if ($scontext !== false) {
+										$dhash = hash_final($dcontext, false);
+									}
+								}
+								if (hash_equals($shash, $dhash)) {
+									wfConfig::remove('needsGeoIPSync');
+									delete_transient('wfSyncGeoIPActive');
+								}
 							}
 						}
-						catch (Exception $e) {
-							//Ignore
+						else {
+							wfConfig::remove('needsGeoIPSync');
+							delete_transient('wfSyncGeoIPActive');
 						}
+					}
+					catch (Exception $e) {
+						//Ignore
 					}
 				}
 			}
@@ -2285,7 +2280,6 @@ SQL
 					'pluginABSPATH'	 => ABSPATH,
 					'serverIPs'		 => json_encode(wfUtils::serverIPs()),
 					'blockCustomText' => wpautop(wp_strip_all_tags(wfConfig::get('blockCustomText', ''))),
-					'betaThreatDefenseFeed' => !!wfConfig::get('betaThreatDefenseFeed'),
 					'disableWAFIPBlocking' => wfConfig::get('disableWAFIPBlocking'),
 					'wordpressVersion' => wfConfig::get('wordpressVersion'),
 					'wordpressPluginVersions' => wfConfig::get_ser('wordpressPluginVersions'),
@@ -3197,8 +3191,6 @@ SQL
 					require(dirname(__FILE__) . '/wfLockedOut.php');
 				}
 				set_transient($tKey, $tries, wfConfig::get('loginSec_countFailMins') * 60);
-			} else if(is_object($authUser) && get_class($authUser) == 'WP_User'){
-				delete_transient($tKey); //reset counter on success
 			}
 		}
 		if(is_wp_error($authUser)){
@@ -3950,7 +3942,7 @@ SQL
 			if($r['type'] == 'error'){
 				$content .= "\n";
 			}
-			$content .= date(DATE_RFC822, $r['ctime'] + $timeOffset) . '::' . sprintf('%.4f', $r['ctime']) . ':' . $r['level'] . ':' . $r['type'] . '::' . wp_kses_data( (string) $r['msg']) . "\n";
+			$content .= date(DATE_RFC822, intval($r['ctime']) + $timeOffset) . '::' . sprintf('%.4f', $r['ctime']) . ':' . $r['level'] . ':' . $r['type'] . '::' . wp_kses_data( (string) $r['msg']) . "\n";
 		}
 		$content .= "\n\n";
 		$content .= str_repeat('-', 80);
@@ -4429,6 +4421,7 @@ SQL
 	}
 	public static function ajax_installLicense_callback() {
 		if (!empty($_POST['license'])) {
+			$statusChange = array_key_exists('status_change', $_POST) ? filter_var($_POST['status_change'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : null;
 			$license = strtolower(trim($_POST['license']));
 			if (!preg_match('/^[a-fA-F0-9]+$/', $license)) {
 				return array(
@@ -4440,18 +4433,25 @@ SQL
 			if ($existingLicense != $license) { //Key changed, try activating
 				$api = new wfAPI($license, wfUtils::getWPVersion());
 				try {
-					$res = $api->call('check_api_key', array(), array('previousLicense' => $existingLicense));
+					$parameters = array();
+					if (!empty($existingLicense))
+						$parameters['previousLicense'] = $existingLicense;
+					$res = $api->call('check_api_key', array(), $parameters);
 					if ($res['ok'] && isset($res['isPaid'])) {
 						$isPaid = wfUtils::truthyToBoolean($res['isPaid']);
 						wfConfig::set('apiKey', $license);
 						wfConfig::set('isPaid', $isPaid); //res['isPaid'] is boolean coming back as JSON and turned back into PHP struct. Assuming JSON to PHP handles bools.
-						wordfence::licenseStatusChanged();
+						if ($statusChange !== false) {
+							self::licenseStatusChanged();
+						}
 						if (!$isPaid) {
 							wfConfig::set('keyType', wfLicense::KEY_TYPE_FREE);
 						}
+						self::scheduleCrons();
 						return array(
 							'success' => 1,
 							'isPaid' => wfConfig::get('isPaid') ? 1 : 0,
+							'type' => wfLicense::current()->getType()
 						);
 					}
 					else if (isset($res['_hasKeyConflict']) && $res['_hasKeyConflict']) {
@@ -4472,9 +4472,13 @@ SQL
 				}
 			}
 			else {
+				if ($statusChange === true) {
+					self::licenseStatusChanged();
+				}
 				return array(
 					'success' => 1,
 					'isPaid' => wfConfig::get('isPaid') ? 1 : 0,
+					'type' => wfLicense::current()->getType()
 				);
 			}
 		}
@@ -4984,8 +4988,20 @@ HTACCESS;
 				break;
 			case wfIssues::SCAN_FAILED_START_TIMEOUT:
 			case wfIssues::SCAN_FAILED_CALLBACK_TEST_FAILED:
+				$resumeAttempts = wfScanMonitor::getConfiguredResumeAttempts();
+				if ($resumeAttempts > 0) {
+					if ($resumeAttempts === 1)
+						$resumeMessage = __('Wordfence will make one attempt to resume each failed scan stage. This scan may recover if this attempt is successful.', 'wordfence');
+					else
+						$resumeMessage = sprintf(__('Wordfence will make up to %d attempts to resume each failed scan stage. This scan may recover if one of these attempts is successful.', 'wordfence'), $resumeAttempts);
+					$resumeMessage = " {$resumeMessage} ";
+				}
+				else {
+					$resumeMessage = '';
+				}
 				$scanFailedHTML = wfView::create('scanner/scan-failed', array(
-					'messageHTML' => __('The scan has failed to start. This is often because the site either cannot make outbound requests or is blocked from connecting to itself.', 'wordfence') . ' <a href="' . wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_FAILED_START) . '" target="_blank" rel="noopener noreferrer">' . __('Click here for steps you can try.', 'wordfence') . '<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>',
+					'messageTitle' => __('Scan Stage Failed', 'wordfence'),
+					'messageHTML' => __('A scan stage has failed to start. This is often because the site either cannot make outbound requests or is blocked from connecting to itself.', 'wordfence') . $resumeMessage . ' <a href="' . wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_FAILED_START) . '" target="_blank" rel="noopener noreferrer">' . __('Click here for steps you can try.', 'wordfence') . '<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>',
 					'buttonTitle' => __('Close', 'wordfence'),
 				))->render();
 				break;
@@ -5454,7 +5470,7 @@ HTACCESS;
 						$d['t'] = esc_html(wfUtils::makeTimeAgo(time() - $d['t']) . ' ago');
 					}
 					else {
-						$d['t'] = esc_html(date_i18n(get_option('date_format') . ' ' . get_option('time_format'), (int) $d['t']));
+						$d['t'] = esc_html(wfUtils::formatLocalTime(get_option('date_format') . ' ' . get_option('time_format'), (int) $d['t']));
 					}
 				}
 				return array('ok' => 1, 'data' => $data);
@@ -6051,14 +6067,28 @@ HTML;
 			wp_enqueue_style('wordfence-global-style', wfUtils::getBaseURL() . wfUtils::versionedAsset('css/wf-global.css'), '', WORDFENCE_VERSION);
 			self::setupAdminVars();
 		}
-		
+
 		if (is_admin()) { //Back end only
+			if (wfOnboardingController::shouldShowAnyAttempt()) {
+				wp_enqueue_script('wordfenceOnboardingjs', wfUtils::getBaseURL() . wfUtils::versionedAsset('js/wfonboarding.js'), array('jquery', 'wordfenceAdminExtjs'), WORDFENCE_VERSION);
+			}
+			if (self::shouldRegisterDeactivationPrompt() && preg_match('/\/wp-admin\/plugins.php$/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) {
+				wp_enqueue_style('wordfence-colorbox-style', wfUtils::getBaseURL() . wfUtils::versionedAsset('css/wf-colorbox.css'), '', WORDFENCE_VERSION);
+				wp_enqueue_script('jquery.wfcolorbox', wfUtils::getBaseURL() . wfUtils::versionedAsset('js/jquery.colorbox-min.js'), array('jquery'), WORDFENCE_VERSION);
+			}
+
 			wfUtils::refreshCachedHomeURL();
 			wfUtils::refreshCachedSiteURL();
 		}
+
+		if (self::isWordfenceInstallPage())
+			return;
 		
 		//Early WAF configuration actions
-		if ((!WFWAF_AUTO_PREPEND || WFWAF_SUBDIRECTORY_INSTALL) && empty($_GET['wafAction']) && !wfConfig::get('dismissAutoPrependNotice') && !wfOnboardingController::shouldShowAttempt3() && !wfConfig::get('touppPromptNeeded')) {
+		if (wfOnboardingController::shouldShowAttempt3(!self::isWordfencePage(false))) {
+			add_action(is_multisite() ? 'network_admin_notices' : 'admin_notices', 'wordfence::showOnboardingBanner');
+		}
+		elseif ((!WFWAF_AUTO_PREPEND || WFWAF_SUBDIRECTORY_INSTALL) && empty($_GET['wafAction']) && !wfConfig::get('dismissAutoPrependNotice') && !wfConfig::get('touppPromptNeeded')) {
 			if (is_multisite()) {
 				add_action('network_admin_notices', 'wordfence::wafAutoPrependNotice');
 			} else {
@@ -6308,8 +6338,8 @@ HTML;
 	}
 	public static function noKeyError(){
 		echo '<div id="wordfenceConfigWarning" class="fade error"><p>' .
-			sprintf('<strong>%s</strong> ', __('Wordfence could not register with the Wordfence scanning servers when it activated.', 'wordfence')) .
-			__('You can try to fix this by deactivating Wordfence and then activating it again, so Wordfence will retry registering for you. If you keep seeing this error, it usually means your WordPress server can\'t connect to our scanning servers, or your wfConfig database table cannot be created to save the key. You can try asking your host to allow your server to connect to noc1.wordfence.com or check the wfConfig database table and database privileges.', 'wordfence')
+			sprintf('<strong>%s</strong> ', __("Wordfence's license key is missing.", 'wordfence')) .
+			wp_kses(sprintf(__("This could be caused by a database problem. You may need to repair your \"wfconfig\" database table or fix your database user's privileges if they have changed recently, or you may need to reinstall Wordfence. Please <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">contact Wordfence support<span class=\"screen-reader-text\"> (" . esc_html__('opens in new tab', 'wordfence') . ")</span></a> if you need help.", 'wordfence'), wfSupportController::esc_supportURL()), array('a' => array('href' => array(), 'target' => array(), 'rel' => array()), 'span' => array('class' => array())))
 			. '</p></div>';
 	}
 	public static function wafConfigInaccessibleNotice() {
@@ -6475,9 +6505,18 @@ HTML;
 		$formattedCount = number_format_i18n($notificationCount);
 		return " <span class=\"update-plugins wf-menu-badge wf-notification-count-container{$hidden}\" title=\"" . esc_attr($formattedCount) . '"><span class="update-count wf-notification-count-value">' . esc_html($formattedCount) . '</span></span>';
 	}
+
+	public static function isWordfenceInstallPage() {
+		return self::isPage('WordfenceInstall');
+	}
+
+	public static function isWordfenceSupportPage() {
+		return self::isPage('WordfenceSupport');
+	}
+
 	public static function admin_menus(){
 		if(! wfUtils::isAdmin()){ return; }
-		$warningAdded = false;
+		$warningAdded = self::isWordfenceInstallPage();
 		if(get_option('wf_plugin_act_error', false)){
 			if(wfUtils::isAdminPageMU()){
 				add_action('network_admin_notices', 'wordfence::activation_warning');
@@ -6486,7 +6525,7 @@ HTML;
 			}
 			$warningAdded = true;
 		}
-		if(! wfConfig::get('apiKey')){
+		if(!wfConfig::get('apiKey') && !wfOnboardingController::shouldShowAnyAttempt()){
 			if(wfUtils::isAdminPageMU()){
 				add_action('network_admin_notices', 'wordfence::noKeyError');
 			} else {
@@ -6725,6 +6764,12 @@ HTML;
 	public static function admin_menus_80() {
 		if (wfCentral::isSupported() && self::isPage('WordfenceCentral')) {
 			add_submenu_page('Wordfence', __('Wordfence Central', 'wordfence'), __('Wordfence Central', 'wordfence'), 'activate_plugins', 'WordfenceCentral', 'wordfence::menu_wordfence_central');
+		}
+	}
+
+	public static function admin_menus_85() {
+		if (wfOnboardingController::shouldShowAnyAttempt() || self::isWordfenceInstallPage()) {
+			add_submenu_page('Wordfence', __('Install Wordfence', 'wordfence'), __('Install', 'wordfence'), 'activate_plugins', 'WordfenceInstall', 'wordfence::menu_install');
 		}
 	}
 
@@ -7099,6 +7144,38 @@ JQUERY;
 		wp_enqueue_script('wordfence-select2-js');
 
 		require(dirname(__FILE__) . '/menu_wordfence_central.php');
+	}
+
+	public static function menu_install() {
+		$token = array_key_exists('token', $_GET) ? $_GET['token'] : null;
+		$payload = array_key_exists('payload', $_GET) ? $_GET['payload'] : null;
+		$invalidLink = false;
+		$payloadException = null;
+		$email = null;
+		$license = null;
+		if ($shouldShowOnboarding = wfOnboardingController::shouldShowAnyAttempt()) {
+			if (!empty($token) && !empty($payload)) {
+				if (wfLicense::validateRegistrationToken($token)) {
+					$wfWebsite = wfWebsite::getInstance();
+					try {
+						$data = $wfWebsite->retrievePayload($payload, $expiredPayload);
+						$data = json_decode($data, true);
+						if (is_array($data) && array_key_exists('email', $data) && array_key_exists('license', $data)) {
+							$email = (string) $data['email'];
+							$license = (string) $data['license'];
+						}
+					}
+					catch (wfWebsiteEphemeralPayloadRetrievalException $e) {
+						$payloadException = $e;
+						$invalidLink = true;
+					}
+				}
+				else {
+					$invalidLink = true;
+				}
+			}
+		}
+		require(__DIR__ . '/menu_install.php');
 	}
 
 	public static function fsActionRestoreFileCallback() {
@@ -9025,6 +9102,14 @@ SQL
 		}
 
 		return $string;
+	}
+
+	public static function showOnboardingBanner() {
+		wfOnboardingController::enqueue_assets();
+		if (self::isWordfencePage(false) && !self::isWordfenceInstallPage() && !self::isWordfenceSupportPage()) {
+			echo wfView::create('onboarding/disabled-overlay')->render();
+		}
+		echo wfView::create('onboarding/banner', array('dismissable' => !self::isWordfencePage(false)))->render();
 	}
 
 	public static function wafAutoPrependNotice() {

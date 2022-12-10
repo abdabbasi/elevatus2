@@ -1,0 +1,238 @@
+.page-template-home {
+  .header-sec {
+    height: calc(100vh );
+    background: linear-gradient(90deg, #eaebf9 70%, #ffffff 70%);
+    margin-bottom: 160px;
+    .content {
+      padding-right: 3rem;
+    }
+    .image {
+      height: 100%;
+      img {
+        width: calc(100% + (100vw - 1400px) / 2 + 1rem);
+        height: 100%;
+        object-fit: cover;
+        transform: translateY(50px);
+        filter: drop-shadow(0px 25px 64px #21090914);
+      }
+    }
+  }
+
+  .features-sec {
+    .boxes {
+      .box {
+        position: relative;
+        padding: 1rem 4rem 1rem 2rem;
+        margin: 1rem 0;
+        &::before {
+          content: "";
+          position: absolute;
+          height: 100%;
+          width: 3px;
+          background: linear-gradient(132.66deg, #6664d5 -12.57%, #81aae8 98.73%);
+          top: 0;
+          left: 0;
+        }
+        .content {
+          font-weight: 400;
+          font-size: 20px;
+          line-height: 145%;
+          color: #242533;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  
+}
+
+.features2-sec {
+  .boxes {
+    .box {
+      width: 32%;
+      background: #f6f6f6;
+      border-radius: 6px;
+      padding: 32px 24px 24px;
+      margin: 1rem 0;
+      img {
+        width: 35px;
+        height: 35px;
+        object-fit: contain;
+      }
+      .title {
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 145%;
+        color: #000000;
+        margin: 0.5rem 0;
+      }
+      .content {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 155%;
+        color: #808192;
+      }
+    }
+  }
+}
+
+.gdpr-sec {
+  p {
+    span {
+      font-weight: 300;
+      color: #9fa0b0 !important;
+      -webkit-text-fill-color: initial;
+    }
+  }
+}
+
+// Testimonial Section
+.testimonial-sec {
+  .testimonials-slider-2 {
+    * {
+      transition: none;
+    }
+    .splide__slide {
+      padding: 0.5rem;
+      .slide {
+        padding: 2rem;
+        background-color: #eaebf9;
+        border-radius: 4px;
+        height: 100%;
+        img {
+          width: 110px;
+          height: 110px;
+          object-fit: cover;
+        }
+        .right-side {
+          padding-left: 2rem;
+        }
+        .content {
+          p {
+            font-weight: 400;
+            font-size: 24px;
+            line-height: 140%;
+            color: #484964;
+          }
+        }
+        .name,
+        .position {
+          font-weight: 700;
+          font-size: 16px;
+          line-height: 148%;
+          color: #242533;
+        }
+        .position {
+          font-weight: 400;
+        }
+      }
+      &:nth-child(odd) {
+        .slide {
+          background-color: #5b5da6;
+          .content {
+            p {
+              color: #ffffff;
+            }
+          }
+          .name,
+          .position {
+            color: #ffffff;
+          }
+        }
+      }
+    }
+    .splide__arrow {
+      display: none;
+    }
+  }
+}
+.page-template-home {
+  .testimonial-sec {
+    background: none;
+  }
+}
+
+.products-sec {
+  padding: 5rem 0;
+  .logo {
+    max-width: 160px;
+    height: auto;
+    object-fit: contain;
+  }
+  .content {
+    padding-right: 3rem;
+  }
+
+  .side-img {
+    img {
+      width: calc(100% + (100vw - 1200px) / 2 + 1rem);
+      height: 80vh;
+      object-fit: contain;
+    }
+  }
+
+  &.eva-rec {
+    background: linear-gradient(90deg, rgba(234, 235, 249, 1) 70%, rgba(255, 255, 255, 1) 70%);
+    padding-bottom: 0;
+    .side-img {
+      padding-top: 2rem;
+    }
+  }
+  &.eva-ssess {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 45%, rgba(153, 211, 201, 1) 45%);
+  }
+  &.eva-board {
+    background: linear-gradient(90deg, rgba(216, 232, 246, 1) 70%, rgba(255, 255, 255, 1) 70%);
+  }
+}
+
+.explore-sec {
+  .box {
+    width: 32%;
+    border-radius: 6px;
+    background: #f6f6f6;
+    overflow: hidden;
+    margin: 0 0 1.5rem;
+    .content {
+      padding: 1.5rem;
+      .logo {
+        height: 30px;
+        width: auto;
+        object-fit: contain;
+      }
+      .title {
+        font-weight: 500;
+      }
+      .link {
+        width: fit-content;
+        padding-right: 1rem;
+        padding-bottom: 1rem;
+        img {
+          width: 35px;
+        }
+        &:hover {
+          transform: translateX(1rem);
+        }
+      }
+    }
+    .image {
+      width: 100%;
+      height: 370px;
+      object-fit: cover;
+      object-position: bottom;
+    }
+  }
+}
+
+@media (max-width: 1700px){
+  .page-template-home {
+    .header-sec {
+      .image {
+        img {
+          width: calc(100% + (100vw - 1200px) / 2 + 1rem);
+        }
+      }
+    }
+  }
+}

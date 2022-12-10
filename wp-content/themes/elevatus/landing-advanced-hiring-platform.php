@@ -24,7 +24,7 @@
                         alt="<?php echo get_field('header_image_2')['alt']; ?>">
                 </div>
                 <div class="content w-13 pl-5">
-                    <h4 class="sub-title mb-2"><?php echo get_field('page_subtitle'); ?></h4>
+                    <h4 class="mb-2"><?php echo get_field('page_subtitle'); ?></h4>
                     <p class="small-text"><?php echo get_field('small_text'); ?></p>
                     <img src="<?php echo get_field('header_logos')['url']; ?>"
                         alt="<?php echo get_field('header_logos')['alt']; ?>">
@@ -57,7 +57,7 @@
             <div class="logos d-flex flex-wrap align-center pt-2 j-center">
                 <?php if( have_rows('company_logos') ): ?>
                 <?php while( have_rows('company_logos') ): the_row();?>
-                <div class="w-6">
+                <div class="w-6 d-flex j-center align-center">
                     <img src="<?php echo get_sub_field('logo')['url']; ?>"
                         alt="<?php echo get_sub_field('logo')['alt']; ?>">
                 </div>

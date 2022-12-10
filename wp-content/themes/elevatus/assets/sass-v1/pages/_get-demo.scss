@@ -1,0 +1,126 @@
+.page-template-thank-you {
+    #demo_calendly {
+        padding-top: 100px;
+        background: url("assets/images/thank-you-bg.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        margin-bottom: -3rem;
+        iframe {
+            margin-top: -1rem;
+            min-height: 700px;
+            position: relative;
+            // right: -6rem;
+            z-index: 5;
+        }
+        .content {
+            // width: calc(100% + 150px);
+            width: 100%;
+            h4 {
+                text-align: center;
+                font-size: 58px;
+                font-weight: 400;
+                color: #fff;
+            }
+        }
+    }
+
+    main.thank-you-page {
+        .latest-updates {
+            margin-top: 10rem;
+            .container {
+                .head {
+                    border-bottom: 1px solid #e4e4eb;
+                    a {
+                        border: 1px solid #2425330f;
+                        padding: 1rem;
+                        border-radius: 4px;
+                        text-decoration: none;
+                        font-weight: 400;
+                        font-size: 16px;
+                        color: #242533;
+                    }
+                }
+                .content {
+                    .post {
+                        border-bottom: 1px solid red;
+                        padding-bottom: 1rem;
+                        .image {
+                            margin-right: 2.5rem;
+                        }
+                        .sub-content {
+                            padding-right: 7.5rem;
+                            .category,
+                            .title {
+                                font-weight: 500;
+                            }
+                            .category {
+                                font-size: 14px;
+                                color: #5b5da6;
+                                margin-top: 0;
+                            }
+                            .title {
+                                font-size: 20px;
+                            }
+                            .description,
+                            .date,
+                            .posted_by {
+                                font-size: 13px;
+                                font-weight: 400;
+                                padding: 0;
+                                margin: 0;
+                                margin-bottom: 0.25rem;
+                                color: #808192;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.demo-page {
+    // Header Section
+    .landing-form-sec {
+        .form-wrapper {
+            margin-bottom: -2rem;
+            z-index: 1;
+        }
+        .content {
+            background: #f3f4f5;
+            padding: 5rem;
+            position: relative;
+            bottom: -5rem;
+            left: -3rem;
+            z-index: 0;
+        }
+    }
+
+    // Testimonial Section
+    .testimonial-sec {
+        background: none;
+    }
+
+    .cta-sec {
+        .btn {
+            display: none;
+        }
+    }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .page-template-thank-you {
+        #demo_calendly {
+            padding-top: 50px;
+            margin-bottom: 14rem;
+            iframe {
+                margin-top: 0;
+                right: 0;
+            }
+            .content {
+                width: 100%;
+            }
+        }
+    }
+}

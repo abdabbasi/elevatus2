@@ -1,0 +1,130 @@
+.education-page {
+    .product-header-sec {
+        background: #eaebf9;
+        margin-bottom: 0;
+    }
+    &.eva-ssess-page .product-header-sec .image img {
+        height: 80%;
+    }
+
+    .content-image-accordion-sec {
+        .sub-heading {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 155%;
+            color: #808192;
+        }
+    }
+}
+
+.image-company-logos {
+    &.bg-purple {
+        margin-top: -13rem;
+        margin-bottom: 4rem;
+        background: #eaebf9;
+        position: relative;
+        z-index: 1;
+        .image-container {
+            img {
+                position: relative;
+                bottom: -4rem;
+            }
+        }
+    }
+}
+
+.education-page.eva-ssess-page .content-image-accordion-sec .image img {
+    margin-bottom: -4px;
+}
+
+.eva-ssess-page .content-image-accordion-sec.left-image {
+    &.blue-box-overlap {
+        background: #f6f6f6;
+        position: relative;
+        padding-top: 10rem;
+        padding-bottom: 0;
+        .image {
+            width: 100% !important;
+            padding-right: 0;
+        }
+        .content-side {
+            background: #051274;
+            border-radius: 1px;
+            padding: 4rem 5rem;
+            padding-right: 8rem;
+            position: absolute;
+            top: 5rem;
+            z-index: 1;
+            right: 0;
+            height: 60%;
+            * {
+                color: #ffffff;
+            }
+        }
+    }
+}
+
+// industries-main-page
+.industries-main-page {
+    .explore-sec {
+        &.title-right {
+            div.mb-1.pt-1 {
+                margin-right: 0;
+                margin-left: auto;
+            }
+        }
+        &.title-small {
+            h3 {
+                font-weight: 400;
+                font-size: 32px;
+                line-height: 130%;
+            }
+        }
+        div.mb-1.pt-1 {
+            border-bottom: none !important;
+            margin-bottom: 4rem;
+            width: 60%;
+        }
+        .box {
+            .image {
+                display: none;
+            }
+            .content {
+                .logo {
+                    width: 82px;
+                    height: 82px;
+                    object-fit: contain;
+                }
+                .d-flex {
+                    justify-content: start;
+                }
+                .link {
+                    transform: rotate(-45deg);
+                    width: 44px;
+                    height: 44px;
+                    padding: 0.5rem;
+                    margin-top: 4rem;
+                    &:hover {
+                        transform: rotate(-45deg) translateX(1rem) !important;
+                    }
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                    }
+                }
+                .sub-heading {
+                    font-weight: 500;
+                    font-size: 32px;
+                    line-height: 130%;
+                }
+                p:not(.sub-heading) {
+                    color: #808192;
+                    font-weight: 400;
+                    font-size: 20px;
+                    line-height: 135%;
+                }
+            }
+        }
+    }
+}

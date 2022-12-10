@@ -154,12 +154,13 @@ function elevatus_scripts() {
 	wp_enqueue_script('paradigm-dh-smooth-scroll', get_template_directory_uri() . '/js/smooth-scroll.js', array(), _S_VERSION, true);
 
 	// Custom Style
+	wp_enqueue_style( 'elevatus-style-old', get_template_directory_uri() . '/style-v1.css', array(), _S_VERSION );
 	wp_enqueue_style( 'elevatus-style', get_stylesheet_uri(), array(), _S_VERSION );
 	wp_style_add_data( 'elevatus-style', 'rtl', 'replace' );
 	
 	// Custom js
-	wp_enqueue_script( 'elevatus-functions', get_template_directory_uri() . '/js/functions.js', array(), _S_VERSION, true );
 	wp_enqueue_script( 'elevatus-controllers', get_template_directory_uri() . '/js/controllers.js', array(), _S_VERSION, true );
+	wp_enqueue_script( 'elevatus-functions', get_template_directory_uri() . '/js/functions.js', array(), _S_VERSION, true );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
@@ -213,12 +214,6 @@ if( function_exists('acf_add_options_page') ) {
 		'menu_title'	=> 'Header',
 		'parent_slug'	=> 'theme-general-settings',
 	));
-	
-	acf_add_options_sub_page(array(
-		'page_title' 	=> 'Footer Settings',
-		'menu_title'	=> 'Footer',
-		'parent_slug'	=> 'theme-general-settings',
-	));
 
 	acf_add_options_sub_page(array(
 		'page_title' 	=> 'Blocks Settings',
@@ -231,7 +226,7 @@ if( function_exists('acf_add_options_page') ) {
 		'menu_title'	=> 'Our People',
 		'menu_slug' 	=> 'our-people-settings',
 		'capability'	=> 'edit_posts',
-		'icon_url' 		=> 'groups',
+		'icon_url'      => 'dashicons-groups',
 		'position' 		=> '6',
 		'redirect'		=> false
 	));
@@ -375,6 +370,281 @@ function my_acf_init_block_types() {
             'category'          => 'formatting',
             'icon'              => 'products',
             'keywords'          => array( 'products' ),
+        ));
+		
+		// register a Candles block.
+        acf_register_block_type(array(
+            'name'              => 'candles',
+            'title'             => __('Candles'),
+            'description'       => __('A custom Candles block.'),
+            'render_template'   => 'blocks/candles.php',
+            'category'          => 'formatting',
+            'icon'              => 'products',
+            'keywords'          => array( 'products' ),
+        ));
+
+		// register a Articles block.
+        acf_register_block_type(array(
+            'name'              => 'articles',
+            'title'             => __('Articles'),
+            'description'       => __('A custom Articles block.'),
+            'render_template'   => 'blocks/articles.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'products' ),
+        ));
+
+		// register a content-with-image block.
+        acf_register_block_type(array(
+            'name'              => 'content-with-image',
+            'title'             => __('Content with image'),
+            'description'       => __('A custom content-with-image block.'),
+            'render_template'   => 'blocks/content-with-image.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'content', 'image' ),
+        ));
+		
+		// register a Company Logos block.
+        acf_register_block_type(array(
+            'name'              => 'company-logos',
+            'title'             => __('Company Logos'),
+            'description'       => __('A custom Company Logos block.'),
+            'render_template'   => 'blocks/company-logos.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'content', 'image' ),
+        ));
+		
+		// register a GDPR block.
+        acf_register_block_type(array(
+            'name'              => 'gdpr',
+            'title'             => __('GDPR'),
+            'description'       => __('A custom GDPR block.'),
+            'render_template'   => 'blocks/gdpr.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'content', 'image' ),
+        ));
+
+		// register a image-with-companies-logos block.
+        acf_register_block_type(array(
+            'name'              => 'image-with-companies-logos',
+            'title'             => __('Image with Companies Logos'),
+            'description'       => __('A custom image-with-companies-logos block.'),
+            'render_template'   => 'blocks/image-with-company-logos.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'content', 'image' ),
+        ));
+
+		// register a image-with-counters block.
+        acf_register_block_type(array(
+            'name'              => 'image-with-counters',
+            'title'             => __('Image with Counters'),
+            'description'       => __('A custom image-with-counters block.'),
+            'render_template'   => 'blocks/image-with-counters.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'content', 'image' ),
+        ));
+		
+        // register a Seamless block.
+        acf_register_block_type(array(
+            'name'              => 'Seamless',
+            'title'             => __('seamless'),
+            'description'       => __('A custom Seamless block.'),
+            'render_template'   => 'blocks/seamless.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'Seamless' ),
+        ));
+       
+        // register a Features Boxes block.
+        acf_register_block_type(array(
+            'name'              => 'Features Boxes',
+            'title'             => __('Features Boxes'),
+            'description'       => __('A custom Features Boxes block.'),
+            'render_template'   => 'blocks/features-boxes.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'boxes' ),
+        ));
+       
+        // register a Our Team block.
+        acf_register_block_type(array(
+            'name'              => 'Our Team',
+            'title'             => __('Our Team'),
+            'description'       => __('A custom Our Team block.'),
+            'render_template'   => 'blocks/our-team.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'Our Team' ),
+        ));
+
+        // register a Image with articles.
+        acf_register_block_type(array(
+            'name'              => 'Image with articles',
+            'title'             => __('Image with articles'),
+            'description'       => __('A custom Image with articles block.'),
+            'render_template'   => 'blocks/image-with-articles.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'Image with articles' ),
+        ));
+        
+        // register a statistics.
+        acf_register_block_type(array(
+            'name'              => 'Statistics',
+            'title'             => __('statistics'),
+            'description'       => __('A custom statistics block.'),
+            'render_template'   => 'blocks/statistics.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'statistics' ),
+        ));
+        
+        // register a Statistics with content & Image.
+        acf_register_block_type(array(
+            'name'              => 'Statistics with content & Image',
+            'title'             => __('Statistics with content & Image'),
+            'description'       => __('A custom Statistics with content & Image block.'),
+            'render_template'   => 'blocks/statistics-with-content.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'statistics' ),
+        ));
+        
+        // register a Boxes with Image Background.
+        acf_register_block_type(array(
+            'name'              => 'Boxes with Image Background',
+            'title'             => __('Boxes with Image Background'),
+            'description'       => __('A custom Boxes with Image Background block.'),
+            'render_template'   => 'blocks/boxes.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'Boxes' ),
+        ));
+
+        // register a Seagulls Section.
+        acf_register_block_type(array(
+            'name'              => 'Boxes Seagulls Section',
+            'title'             => __('Boxes Seagulls Section'),
+            'description'       => __('A custom Seagulls Section block.'),
+            'render_template'   => 'blocks/seagulls-sec.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'Boxes' ),
+        ));
+
+        // register a Hero Blog Section.
+        acf_register_block_type(array(
+            'name'              => 'Hero Blog Section',
+            'title'             => __('Hero Blog Section'),
+            'description'       => __('A custom Hero Blog Section block.'),
+            'render_template'   => 'blocks/blog-hero.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'Boxes' ),
+        ));
+
+        // register a Popular Blogs Section.
+        acf_register_block_type(array(
+            'name'              => 'Popular Blogs Section',
+            'title'             => __('Popular Blogs Section'),
+            'description'       => __('A custom Popular Blogs Section block.'),
+            'render_template'   => 'blocks/popular-sec.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'Boxes' ),
+        ));
+
+        // register a Advantages Section.
+        acf_register_block_type(array(
+            'name'              => 'Advantages Section',
+            'title'             => __('Advantages Section'),
+            'description'       => __('A custom Advantages Section block.'),
+            'render_template'   => 'blocks/advantages-block.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'Boxes' ),
+        ));
+        
+        // register a Landing Form
+        acf_register_block_type(array(
+            'name'              => 'Landing Form',
+            'title'             => __('Landing Form'),
+            'description'       => __('A custom Landing Form block.'),
+            'render_template'   => 'blocks/landing-form.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'Boxes' ),
+        ));
+        
+        // register a Home Products Info
+        acf_register_block_type(array(
+            'name'              => 'Home Products Info',
+            'title'             => __('Home Products Info'),
+            'description'       => __('A custom Home Products Info block.'),
+            'render_template'   => 'blocks/home-products.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'Boxes' ),
+        ));
+        
+        // register a Accordion Info
+        acf_register_block_type(array(
+            'name'              => 'Accordion',
+            'title'             => __('Accordion'),
+            'description'       => __('A custom Accordion block.'),
+            'render_template'   => 'blocks/accordion.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'accordion' ),
+        ));
+
+        // register a Get Demo Hero Section
+        acf_register_block_type(array(
+            'name'              => 'Demo Hero',
+            'title'             => __('Demo Hero'),
+            'description'       => __('A custom Demo Hero block.'),
+            'render_template'   => 'blocks/demo_hero.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'Demos' ),
+        ));
+
+        // register a Latest Updates Section
+        acf_register_block_type(array(
+            'name'              => 'Latest Updates',
+            'title'             => __('Latest Updates'),
+            'description'       => __('A custom Latest updates block.'),
+            'render_template'   => 'blocks/latest-updates.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'Latest Updates' ),
+        ));
+
+        // register a Industries Hero Nav Section
+        acf_register_block_type(array(
+            'name'              => 'Industries Hero Nav',
+            'title'             => __('Industries Hero Nav'),
+            'description'       => __('A custom Industries Hero Nav block.'),
+            'render_template'   => 'blocks/industries-hero-nav.php',
+            'category'          => 'formatting',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'industries-hero-nav' ),
+        ));
+
+        // register a Custom Awards block.
+        acf_register_block_type(array(
+            'name'              => 'awards-custom',
+            'title'             => __('Awards Custom'),
+            'description'       => __('A custom awards-sec block.'),
+            'render_template'   => 'blocks/awards-custom.php',
+            'category'          => 'formatting',
+            'icon'              => 'awards',
+            'keywords'          => array( 'content', 'image' ),
         ));
     }
 

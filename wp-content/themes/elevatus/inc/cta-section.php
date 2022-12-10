@@ -1,4 +1,4 @@
-<section class="cta-sec  pt-3 pb-4">
+<section class="cta-sec  pt-3 pb-4 p-rel">
     <div class="container">
         <h3><?php echo get_field('cta_title'); ?></h3>
         <p class="content"><?php echo get_field('cta_content'); ?></p>

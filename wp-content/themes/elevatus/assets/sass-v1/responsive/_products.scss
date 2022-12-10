@@ -1,0 +1,99 @@
+@media (max-width: 1700px) {
+    // content-image-accordion-sec
+    .content-image-accordion-sec {
+        &.full-left-img {
+            .image {
+                img {
+                    position: relative;
+                    width: calc((100vw - 1200px) / 2 + 100%);
+                    left: calc((100vw - 1200px) / 2 * -1);
+                }
+            }
+        }
+    }
+
+    // content-image-accordion-sec
+    .eva-board-page .content-image-accordion-sec {
+        .image {
+            img {
+                width: calc((100vw - 1200px) / 2 + 100% + 0.6rem);
+            }
+        }
+        &.left-image {
+            .image {
+                img {
+                    width: calc((100vw - 1200px) / 2 + 100%);
+                    left: calc((100vw - 1200px) / 2 * -1);
+                }
+            }
+        }
+    }
+
+    // EVA-SSESS Page
+    .eva-ssess-page .content-image-accordion-sec {
+        .image {
+            img {
+                width: calc((100vw - 1200px) / 2 + 100% + 0.6rem);
+            }
+        }
+    }
+    .content-image-accordion-sec {
+        &.img-right-bottom {
+            &.left-image .image {
+                margin-bottom: -9.6rem;
+                img {
+                    width: calc((100vw - 1200px) / 2 + 100% - 4rem);
+                    position: relative;
+                    left: calc((100vw - 1200px) / 2 * -1 + 4rem);
+                }
+            }
+        }
+        &.img-left-bottom {
+            .image {
+                padding-left: calc(3% + 0.4rem);
+                margin-bottom: -7rem;
+                img {
+                    width: calc((100vw - 1200px) / 2 + 100% - 1rem);
+                }
+            }
+        }
+        &.img-right-bottom-rs {
+            .image {
+                img {
+                    right: -5rem;
+                    width: calc((100vw - 1200px) / 2 + 100% - 4rem);
+                }
+            }
+        }
+        &.img-overlap-right {
+            &.left-image .image {
+                img {
+                    // width: calc(100% + 8.5rem);
+                    // margin-bottom: -9rem;
+                }
+            }
+        }
+        &.img-center {
+            .image {
+                img {
+                    right: calc((100vw - 1200px) / 4 * -1);
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .accordion-container {
+        .accordion-header {
+            padding-right: 2rem;
+            &::after {
+                font-size: 20px;
+            }
+            i {
+                padding-right: 0.5rem;
+                padding-left: 0rem;
+            }
+        }
+    }
+}

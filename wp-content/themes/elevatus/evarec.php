@@ -3,12 +3,13 @@
     get_header();
 ?>
 
-<div>
-    <?php echo the_content(); ?>
-</div>
+<main id="primary" class="site-main <?php echo get_field('page_theme'); ?>">
 
-<!-- CTA Section -->
-<?php include get_theme_file_path('/inc/cta-section.php'); ?>
+    <?php the_content(); ?>
+    
+    <!-- CTA Section -->
+    <?php include get_theme_file_path('/inc/cta-section.php'); ?>
+</main>
 
 <?php
 get_footer();

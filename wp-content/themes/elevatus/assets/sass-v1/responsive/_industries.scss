@@ -1,0 +1,84 @@
+@media (max-width: 1200px) {
+    .education-page .progress-analytics-sec .tabs-wrapper .tabs-container {
+        width: 100%;
+        padding-right: 2rem;
+        padding-left: 2rem;
+    }
+}
+@media (max-width: 950px) {
+    // Industries Main 
+    .industries-main-page {
+        .product-header-sec.bg-purple {
+            background: #eaebf9;
+            padding: 1rem 0 0;
+        }
+        .image-company-logos.bg-purple {
+            margin-bottom: 0;
+            padding: 0 0 3rem;
+        }
+    }
+    .eva-ssess-page .content-image-accordion-sec.left-image.blue-box-overlap {
+        .content-side {
+            position: initial;
+            padding: 2rem !important;
+        }
+        .image {
+            display: none;
+        }
+    }
+    .industries-main-page .explore-sec div.mb-1.pt-1 {
+        width: 100%;
+    }
+
+    // Finance Page
+    .image-company-logos {
+        .image-container {
+            display: none;
+        }
+        .content {
+            padding-left: 0;
+        }
+        &.bg-purple {
+            margin-top: 0;
+            margin-bottom: 2rem;
+            padding: 0 0 4rem;
+        }
+        .logos {
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            width: 100%;
+            .pr-2 {
+                padding-right: 1rem;
+            }
+        }
+    }
+    .finance-page {
+        &.medium-to-largr-page {
+            .product-header-sec {
+                margin-bottom: 0;
+                padding: 2rem 0 0;
+                background: #eaebf9;
+            }
+            .progress-analytics-sec {
+                background: #d9f5f0;
+                padding: 1rem 0 1rem 0;
+                margin: 0;
+            }
+        }
+    }
+    .medium-to-largr-page .product-header-sec {
+        background: transparent;
+        margin-bottom: 0;
+        padding: 2rem 0 0;
+    }
+    .gray-theme .image-company-logos {
+        margin-top: 0;
+        padding-bottom: 3rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .medium-to-largr-page .progress-analytics-sec .tabs-wrapper .tabs-container {
+        display: none !important;
+    }
+}

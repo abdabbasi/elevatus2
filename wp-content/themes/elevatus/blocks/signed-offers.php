@@ -1,4 +1,4 @@
-<section class="signed-offers-sec pt-3 pb-3" style="background-image: url('<?php echo get_field('background_image')  ?>')">
+<section class="signed-offers-sec pt-3 pb-3 <?php echo $block['className']; ?>" style="background-image: url('<?php echo get_field('background_image')  ?>')">
     <div class="container">
 
         <div class="d-flex flex-wrap">

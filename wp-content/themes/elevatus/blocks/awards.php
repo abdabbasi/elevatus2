@@ -14,41 +14,19 @@
                 </div>
                 <?php endif; ?>
             </div>
-            <div class="w-2 d-flex flex-wrap">
-                <div class="w-1 box">
-                    <?php
-                            $box_2 = get_field('box_2', 'option');
-                            if( $box_2 ): ?>
-                    <div class="box-wrapper d-flex align-center j-center fd-col">
-                        <img class="logo" src="<?php echo $box_2['logo']; ?>" alt="" />
-                        <p class="year text-center"><?php echo $box_2['year']; ?></p>
-                        <p class="name text-center"><?php echo $box_2['name']; ?></p>
+            <div class="other d-flex flex-wrap">
+                <?php if( have_rows('awards_listing', 'option') ): ?>
+                <?php while( have_rows('awards_listing', 'option') ): the_row();?>
+                    <div class="w-3 box">
+                        <div class="box-wrapper d-flex align-center j-center fd-col">
+                            <img class="logo" src="<?php echo get_sub_field('image', 'option'); ?>"
+                                alt="<?php echo get_sub_field('description', 'option'); ?>" />
+                            <p class="name"><?php echo get_sub_field('description', 'option'); ?></p>
+                            <p class="year"><?php echo get_sub_field('year', 'option'); ?></p>
+                        </div>
                     </div>
-                    <?php endif; ?>
-                </div>
-                <div class="w-2 box">
-                    <?php
-                            $box_3 = get_field('box_3', 'option');
-                            if( $box_3 ): ?>
-                    <div class="box-wrapper">
-                        <img class="logo" src="<?php echo $box_3['logo']; ?>" alt="" />
-                        <p class="year"><?php echo $box_3['year']; ?></p>
-                        <p class="name"><?php echo $box_3['name']; ?></p>
-                    </div>
-                    <?php endif; ?>
-                </div>
-                <div class="w-2 box">
-                    <?php
-                    $box_4 = get_field('box_4', 'option');
-                    if( $box_4 ): ?>
-                    <div class="box-wrapper">
-                        <img class="logo" src="<?php echo esc_url( $box_4['logo']['url'] ); ?>"
-                            alt="<?php echo esc_attr( $box_4['logo']['alt'] ); ?>" />
-                        <p class="year"><?php echo $box_4['year']; ?></p>
-                        <p class="name"><?php echo $box_4['name']; ?></p>
-                    </div>
-                    <?php endif; ?>
-                </div>
+                <?php endwhile;?>
+                <?php endif; ?>
             </div>
         </div>
     </div>

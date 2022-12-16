@@ -1,10 +1,10 @@
 <section class="statistics-sec pt-3 pb-3 mt-3 mb-3 <?php echo $block['className']; ?>">
     <div class="container">
         <div class="d-flex flex-wrap">
-            <div class="w-3">
+            <div class="w-2">
                 <h2><?php echo get_field('title'); ?></h2>
             </div>
-            <div class="list w-13 pt-5">
+            <div class="list w-2 pt-5">
                 <div class="d-flex flex-wrap">
                     <?php if( have_rows('statistics') ): ?>
                     <?php while( have_rows('statistics') ): the_row();?>

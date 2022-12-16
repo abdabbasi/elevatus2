@@ -9,27 +9,18 @@
 
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-	<header class="entry-header">
-		<?php the_title( sprintf( '<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
+<article <?php post_class('item w-2'); ?>>
+    <div class="blog-wrapper d-flex flex-wrap align-center">
 
-		<?php if ( 'post' === get_post_type() ) : ?>
-		<div class="entry-meta">
-			<?php
-			elevatus_posted_on();
-			elevatus_posted_by();
-			?>
-		</div><!-- .entry-meta -->
-		<?php endif; ?>
-	</header><!-- .entry-header -->
+        <?php elevatus_post_thumbnail(); ?>
 
-	<?php elevatus_post_thumbnail(); ?>
+        <a href="<?php echo get_permalink(); ?>" class="content">
+            <p class="cat"><?php echo get_the_category()[0]->name; ?></p>
+            <h5 class="title"><?php echo strip_shortcodes(wp_trim_words(get_the_title(), 5, '...')); ?></h5>
 
-	<div class="entry-summary">
-		<?php the_excerpt(); ?>
-	</div><!-- .entry-summary -->
+            <p class="post-content"><?php echo strip_shortcodes(wp_trim_words(get_the_content(), 10, '...')); ?></p>
 
-	<footer class="entry-footer">
-		<?php elevatus_entry_footer(); ?>
-	</footer><!-- .entry-footer -->
-</article><!-- #post-<?php the_ID(); ?> -->
+            <p class="date"><?php echo get_the_date(); ?></p>
+		</a>
+	</div>
+</article>

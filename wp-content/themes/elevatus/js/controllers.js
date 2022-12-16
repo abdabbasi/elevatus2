@@ -86,7 +86,6 @@ application.register("sidemenu", sidemenu)
 
 // Mega Menu Function
 let windowWidth = window.innerWidth;
-console.log(windowWidth)
 if (windowWidth > 768) {
     document.querySelector('.has-mega-menu').addEventListener("mouseover", function(e){
         e.stopPropagation();

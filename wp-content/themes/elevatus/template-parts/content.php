@@ -9,55 +9,18 @@
 
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-	<div class="entry-header">
-		<?php
-		if ( is_singular() ) :
-			the_title( '<h1 class="entry-title">', '</h1>' );
-		else :
-			the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
-		endif;
+<article <?php post_class('item w-2'); ?>>
+    <div class="blog-wrapper d-flex flex-wrap align-center">
 
-		if ( 'post' === get_post_type() ) :
-			?>
-			<div class="entry-meta">
-				<?php
-				elevatus_posted_on();
-				elevatus_posted_by();
-				?>
-			</div><!-- .entry-meta -->
-		<?php endif; ?>
-		</div><!-- .entry-header -->
+        <?php elevatus_post_thumbnail(); ?>
 
-	<?php elevatus_post_thumbnail(); ?>
+        <a href="<?php echo get_permalink(); ?>" class="content">
+            <p class="cat"><?php echo get_the_category()[0]->name; ?></p>
+            <h5 class="title"><?php echo strip_shortcodes(wp_trim_words(get_the_title(), 5, '...')); ?></h5>
 
-	<div class="entry-content">
-		<?php
-		the_content(
-			sprintf(
-				wp_kses(
-					/* translators: %s: Name of current post. Only visible to screen readers */
-					__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'elevatus' ),
-					array(
-						'span' => array(
-							'class' => array(),
-						),
-					)
-				),
-				wp_kses_post( get_the_title() )
-			)
-		);
+            <p class="post-content"><?php echo strip_shortcodes(wp_trim_words(get_the_content(), 10, '...')); ?></p>
 
-		wp_link_pages(
-			array(
-				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'elevatus' ),
-				'after'  => '</div>',
-			)
-		);
-		?>
-	</div><!-- .entry-content -->
-
-	<div class="entry-footer">
-		<?php elevatus_entry_footer(); ?>
-	</div><!-- .entry-footer -->
-</article><!-- #post-<?php the_ID(); ?> -->
+            <p class="date"><?php echo get_the_date(); ?></p>
+		</a>
+	</div>
+</article>

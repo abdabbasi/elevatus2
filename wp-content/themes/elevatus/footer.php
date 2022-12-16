@@ -18,7 +18,7 @@
                 <div class="site-branding">
                     <?php the_custom_logo(); ?>
                 </div><!-- .site-branding -->
-				<p class="small-text light mt-2">©2022 Elevatus, Inc.</p>
+				<p class="small-text light mt-2">©<?php echo date('Y'); ?> Elevatus, Inc.</p>
             </div>
             <div class="w-5">
                 <p class="menu-title">About</p>

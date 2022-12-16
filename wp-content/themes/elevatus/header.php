@@ -53,7 +53,7 @@
                         <div class="w-4 video-sec">
                             <p class="menu-title"><?php echo get_field('mega_menu_title', 'option'); ?></p>
                             <div class="menu-video">
-                                <video controls poster="<?php echo get_field('menu_video', 'option'); ?>">
+                                <video controls poster="<?php echo get_field('menu_video_poster', 'option'); ?>">
                                     <source src="<?php echo get_field('menu_video', 'option'); ?>" type="video/mp4">
                                     <source src="<?php echo get_field('menu_video', 'option'); ?>" type="video/ogg">
                                     Your browser does not support the video tag.

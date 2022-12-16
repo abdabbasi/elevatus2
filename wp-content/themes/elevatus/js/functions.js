@@ -108,22 +108,40 @@ if (document.querySelector('.company-logos-slider')) {
 
 
 // Side Menu Section
-document.addEventListener("DOMContentLoaded", function(){
-    if(document.querySelector('.has-side-menu .side-menu')){
-        var sideMenu = document.querySelectorAll('.has-side-menu .side-menu a')
+document.addEventListener("DOMContentLoaded", function () {
+	if (document.querySelector('.has-side-menu .side-menu')) {
+		var sideMenu = document.querySelectorAll('.has-side-menu .side-menu a')
 		console.log(sideMenu)
-        if (sideMenu.length != 0){
+		if (sideMenu.length != 0) {
 
-            document.querySelector('.has-side-menu .side-menu a').classList.add('active')
-            sideMenu.forEach(el => {
-                el.addEventListener('click', function(){
-                    sideMenu.forEach(el => {
-                        el.classList.remove('active')
-                    })
-                    this.classList.add('active')
-                })
-            });
-        }
-    }
+			document.querySelector('.has-side-menu .side-menu a').classList.add('active')
+			sideMenu.forEach(el => {
+				el.addEventListener('click', function () {
+					sideMenu.forEach(el => {
+						el.classList.remove('active')
+					})
+					this.classList.add('active')
+				})
+			});
+		}
+	}
+
+	// Filter links (Blog Page)
+	if (document.querySelector('.filter-sec .links')) {
+		document.querySelector('.filter-sec .links').addEventListener('change', function (e) {
+			window.location.href = e.target.value + '#filter_sec';
+		});
+
+		// Set Select Option selected
+		var url = window.location.href;
+		document.querySelectorAll('.filter-sec .links option').forEach(el => {
+			if (el.value == url || url.includes(el.value)) {
+				el.setAttribute("selected", "selected");
+			}
+		});
+	}
+
 });
+
+
 
